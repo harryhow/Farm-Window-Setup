@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 
-
 class ofApp : public ofBaseApp{
 
 	public:
@@ -27,13 +26,25 @@ class ofApp : public ofBaseApp{
     
         //ofxUI setup
         ofxPanel gui;
+        ofxPanel guiBtn;
     	ofxToggle mediaCenter;
         ofxToggle fwplayer;
-        ofxLabel choose;
+        ofxButton proceed;
     
         ofTrueTypeFont myfont24;
         ofTrueTypeFont myfont32;
         ofTrueTypeFont myfont16;
     
+        void proceedBtnPressed();
+        bool isProceedClickable;
+    
+        // button rectangle
+        float top, bottom, left, right;
+        ofRectangle rect;
+        float dx, dy;
+        float scaleX, scaleY;
+        float angle;
+        ofMatrix4x4 matrix;
+        bool isInside;
     
 };
