@@ -19,6 +19,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+        void copyFWFiles(int module);
     
         int width = 800;
         int height = 600;
@@ -34,6 +35,7 @@ class ofApp : public ofBaseApp{
         ofTrueTypeFont myfont24;
         ofTrueTypeFont myfont32;
         ofTrueTypeFont myfont16;
+        ofTrueTypeFont myfontCH16;
     
         void proceedBtnPressed();
         bool isProceedClickable;
@@ -46,5 +48,7 @@ class ofApp : public ofBaseApp{
         float angle;
         ofMatrix4x4 matrix;
         bool isInside;
+        bool isCopying;
+        bool isCopyDone;
     
 };
