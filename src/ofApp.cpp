@@ -10,13 +10,11 @@ void ofApp::setup(){
     gui.add(fwplayer.setup("FW Player", false));
     gui.setPosition(60, 250);
     
-    
     myfont32.loadFont("FZLTZCHJW.ttf", 32);
     myfont24.loadFont("FZLTZCHJW.ttf", 24);
     myfont16.loadFont("FZLTXHJW.ttf", 16);
     myfontCH16.loadFont("FZLTZCHJW.ttf", 16);
     
-
     rect.set(350, 100, 400, 200);
     
     // Transformations applied to the rectangle
@@ -96,15 +94,15 @@ void ofApp::draw(){
         isProceedClickable = false;
     
     
-    ofPushMatrix();
+    if (!isCopyDone) {
+        ofPushMatrix();
         ofMultMatrix(matrix);
         // Same as :
         // ofTranslate( dx, dy, 0 );
         // ofRotate( angle, 0, 0, 1 );
         // ofScale( scaleX, scaleY, 1 );
-    
-    
-    
+        
+        
         if(isInside){
             ofSetColor(ofColor::darkSlateGrey, 100);
             ofFill();
@@ -113,21 +111,20 @@ void ofApp::draw(){
             ofSetColor(ofColor::darkSlateGrey);
             ofFill();
         }
-    
+        
         if (!isProceedClickable){
             ofSetColor(ofColor::darkSlateGrey, 100);
             ofNoFill();
         }
-    
+        
         ofRect(rect);
-    ofPopMatrix();
-    
-    
-    ofSetColor(ofColor::white);
-    myfontCH16.drawString("Install",  340, 515);
-    ofSetColor(ofColor::darkSlateGrey);
-    
-   
+        ofPopMatrix();
+        
+        
+        ofSetColor(ofColor::white);
+        myfontCH16.drawString("Install",  340, 515);
+        ofSetColor(ofColor::darkSlateGrey);
+    }
 }
 
 void ofApp::copyFWFiles(int module) {
@@ -161,13 +158,12 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     
-    if(key == 's') {
-        gui.saveToFile("settings.xml");
-    }
-    if(key == 'l') {
-        gui.loadFromFile("settings.xml");
-    }
-
+//    if(key == 's') {
+//        gui.saveToFile("settings.xml");
+//    }
+//    if(key == 'l') {
+//        gui.loadFromFile("settings.xml");
+//    }
 }
 
 //--------------------------------------------------------------
@@ -188,19 +184,12 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
     
     
-    
-    if (isInside) {
-        cout << "mouse pressed, x: " << x << "y:" << y << "\r\n";
-        isCopying = true;
+    if (mediaCenter || fwplayer) {
+        if (isInside) {
+            cout << "mouse pressed, x: " << x << "y:" << y << "\r\n";
+            isCopying = true;
+        }
     }
-        
-    
-//    bool clicked;
-//    if (button == 0) {
-//        clicked = !clicked;
-//        cout << clicked << endl;
-//    }
-
 }
 
 //--------------------------------------------------------------
