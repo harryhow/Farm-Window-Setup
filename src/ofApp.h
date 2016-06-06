@@ -50,5 +50,7 @@ class ofApp : public ofBaseApp{
         bool isInside;
         bool isCopying;
         bool isCopyDone;
+        string fwplayerPath;
+        string mediacenterPath;
     
 };

@@ -1,5 +1,8 @@
 #include "ofApp.h"
 
+string mediaCenterHome = "/Desktop/FW Media Center";
+string fwPlayerHome = "/Desktop/FW Player";
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     
@@ -30,6 +33,7 @@ void ofApp::setup(){
     isInside = false;
     isCopying = false;
     isCopyDone = false;
+    
 }
 
 //--------------------------------------------------------------
@@ -87,7 +91,6 @@ void ofApp::draw(){
     ofSetColor(ofColor::darkSlateGrey);
     
     if (mediaCenter || fwplayer) {
-        
         isProceedClickable = true;
     }
     else
@@ -130,8 +133,50 @@ void ofApp::draw(){
 void ofApp::copyFWFiles(int module) {
     if (module == 0) { // media center
         cout << "copying media center files" << "\r\n";
+        ofDirectory dir;
+        ofFilePath file;
+        string home = ofFilePath::getUserHomeDir();
+        string installFolder = home + mediaCenterHome;
+        
+//        dir.listDir(homeDesktop);
+//        for (int i = 0; i < dir.size(); i++) {
+//            cout << dir.getPath(i) << endl;
+//        }
+
+        if (!dir.isDirectoryEmpty(installFolder)) { //bug: if there's NO file in the folder, this API will consider this folder is empty.
+            ofSystemAlertDialog("Your existing Farm Window will be removed!");
+            dir.removeDirectory(installFolder, true);
+            cout << "clear anyway!!" << "\r\n";
+        }
+
+        ofDirectory dirBin;
+        string currentDataPath = dirBin.getAbsolutePath();
+        string sourceMediaCenter = currentDataPath + "mediaCenter";
+        //char buffer[255];
+        sourceMediaCenter = "\'" + sourceMediaCenter + "\'";
+        string installFolderSlash = "\'" + installFolder + "\'";
+        cout << "SOURCE PATH:" << sourceMediaCenter << "\r\n";
+        cout << "INSTALL PATH:" << installFolderSlash << "\r\n";
+        
+/*
+// move along with path
+        string::size_type pos = string(currentDataPath).find_last_of( "\\/" );
+        string pathToBin = string(currentDataPath).substr(0, pos);
+        
+        // bug: because of getAbsolutePath API return / at the end of dir path, it's unusal so that I have to search last / again
+        pos = string(currentDataPath).find_last_of( "\\/" );
+        pathToBin = string(currentDataPath).substr(0, pos);
+
+        printf("PATH TO BIN: %s   \n", pathToBin.c_str());
+*/
+        
+        dir.createDirectory(installFolder);
+        string cmd;
+        string space = " ";
+        cmd = "\"rsync -avz --exclude='.DS_Store'" + space + sourceMediaCenter + space + installFolderSlash + "\"";
+        system(cmd.c_str());
+        //system("rsync -avz --exclude='.DS_Store' '/Users/harryhow/Desktop/VSL8 Makeup' '/Users/harryhow/Desktop/FW Media Center'");
         isCopyDone = true;
-        //myfont16.drawString("Copying media center",  60, 430);
     }
     else if (module == 1) { // fw player
         cout << "copying fwplayer files" << "\r\n";
@@ -141,7 +186,6 @@ void ofApp::copyFWFiles(int module) {
     else {
         cout << "wrong module number" << "\r\n";
     }
-    
     isCopying = false;
 }
 
@@ -152,7 +196,6 @@ void ofApp::proceedBtnPressed() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     cout << "keypress:" << key << "\r\n";
-
 }
 
 //--------------------------------------------------------------
@@ -182,8 +225,6 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    
-    
     if (mediaCenter || fwplayer) {
         if (isInside) {
             cout << "mouse pressed, x: " << x << "y:" << y << "\r\n";
